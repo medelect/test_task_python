@@ -62,25 +62,18 @@ def jumper(pts, pos = 1, hist = ((1,),0),mpl=0):
                 print '<'*mpl,'hist',hist
     print '>'*mpl, ' func out', ' p',pos
     return pts
-"""
-def handling(point_list):
-    for i in point_list:
-        for j in point_list.naighbour:
-            pass
 
-
-
-    return 'handle'
-"""
+def handling(source_list):
+    point_amount = len(source_list)
+    lph = source_list[-1].way_history # last point history
+    way_coasts = [way[1]  for way in lph if len(way[0]) == point_amount]
+    return max(way_coasts)
 
 # ******* RUN *******  #
 
-for i in raw_routes:
-#    print i
-    print '\n',len(fabric(i)), [{j.id: j.naighbour} for j in fabric(i)]
-print '\n\n\n'
+print handling(jumper(fabric(raw_routes[2])))
+
 bck_dt = jumper(fabric(raw_routes[2]))
 
-#import pdb; pdb.set_trace()
 for jojo in bck_dt:
     print jojo
