@@ -47,33 +47,26 @@ def fabric(data):
         result[i[1]-1].naighbour.append([i[0],i[2]])
     return result
 
-def jumper(pts, pos = 1, hist = ((1,),0),mpl=0):
-    mpl+=3
-    print '>'*mpl,'S ',pos,hist,pts[pos-1].naighbour
+def jumper(pts, pos = 1, hist = ((1,),0)):
     if {i[0] for i in pts[pos-1].naighbour}.issubset(set(hist[0])):
         pts[pos-1].way_history.append(hist)
-        print '>'*mpl,'write in ', pos, '? ', hist
     else:
         for nb_point in pts[pos-1].naighbour:
-            print '>'*mpl,pos,' nb_pnt ', nb_point,'hist',hist
             if nb_point[0] not in hist[0]:
                 tmp = (hist[0] + (nb_point[0],),hist[1] + nb_point[1])
-                pts = jumper(pts,nb_point[0],tmp,mpl)
-                print '<'*mpl,'hist',hist
-    print '>'*mpl, ' func out', ' p',pos
+                pts = jumper(pts,nb_point[0],tmp)
     return pts
 
 def handling(source_list):
     point_amount = len(source_list)
     lph = source_list[-1].way_history # last point history
     way_coasts = [way[1]  for way in lph if len(way[0]) == point_amount]
-    return max(way_coasts)
+    if way_coasts:
+        return max(way_coasts)
+    else:
+        return 'False'
 
 # ******* RUN *******  #
+for raw_way in raw_routes:
+    print handling(jumper(fabric(raw_way)))
 
-print handling(jumper(fabric(raw_routes[2])))
-
-bck_dt = jumper(fabric(raw_routes[2]))
-
-for jojo in bck_dt:
-    print jojo
